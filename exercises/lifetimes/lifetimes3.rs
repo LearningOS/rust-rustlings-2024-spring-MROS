@@ -7,15 +7,19 @@
 
 // I AM NOT DONE
 
-struct Book {
-    author: &str,
-    title: &str,
+// XXX: 結構體裡放多個生命週期標記有什麼用途？ Book 必須活得比 'a, 'b 都還要長嗎？
+struct Book<'a, 'b> {
+    author: &'a str,
+    title: &'b str,
 }
 
 fn main() {
     let name = String::from("Jill Smith");
     let title = String::from("Fish Flying");
-    let book = Book { author: &name, title: &title };
+    let book = Book {
+        author: &name,
+        title: &title,
+    };
 
     println!("{} by {}", book.title, book.author);
 }
