@@ -5,9 +5,7 @@
 // Execute `rustlings hint lifetimes3` or use the `hint` watch subcommand for a
 // hint.
 
-// I AM NOT DONE
-
-// XXX: 結構體裡放多個生命週期標記有什麼用途？ Book 必須活得比 'a, 'b 都還要長嗎？
+// XXX: 結構體裡放多個生命週期標記有什麼用途？ 'a, 'b 必須活得比 Book 都還要長嗎？
 struct Book<'a, 'b> {
     author: &'a str,
     title: &'b str,
