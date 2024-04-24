@@ -1,8 +1,7 @@
 /*
-	heap
-	This question requires you to implement a binary heap function
+    heap
+    This question requires you to implement a binary heap function
 */
-// I AM NOT DONE
 
 use std::cmp::Ord;
 use std::default::Default;
@@ -37,7 +36,19 @@ where
     }
 
     pub fn add(&mut self, value: T) {
-        //TODO
+        self.count += 1;
+        let mut index = self.count;
+        self.items.push(value);
+        while index > 1 {
+            println!("{}", index);
+            let parent = self.parent_idx(index);
+            if (self.comparator)(&self.items[index], &self.items[parent]) {
+                self.items.swap(index, parent);
+                index = parent;
+            } else {
+                break;
+            }
+        }
     }
 
     fn parent_idx(&self, idx: usize) -> usize {
@@ -54,11 +65,6 @@ where
 
     fn right_child_idx(&self, idx: usize) -> usize {
         self.left_child_idx(idx) + 1
-    }
-
-    fn smallest_child_idx(&self, idx: usize) -> usize {
-        //TODO
-		0
     }
 }
 
@@ -84,8 +90,42 @@ where
     type Item = T;
 
     fn next(&mut self) -> Option<T> {
-        //TODO
-		None
+        if self.count < 1 {
+            None
+        } else if self.count == 1 {
+            self.count = 0;
+            let ret = self.items.pop().unwrap();
+            Some(ret)
+        } else {
+            // self.count > 1
+            self.count -= 1;
+            let last = self.items.pop().unwrap();
+            let ret = std::mem::replace(&mut self.items[1], last);
+            let mut index = 1;
+            while self.children_present(index) {
+                let current = &self.items[index];
+                let left = &self.items[index * 2];
+                let (challenger_index, challenger_value) = if index * 2 + 1 == self.items.len() {
+                    // 右子不存在
+                    (index * 2, left)
+                } else {
+                    let right = &self.items[index * 2 + 1];
+                    if (self.comparator)(left, right) {
+                        (index * 2, left)
+                    } else {
+                        (index * 2 + 1, right)
+                    }
+                };
+                if !(self.comparator)(current, challenger_value) {
+                    self.items.swap(index, challenger_index);
+                    index = challenger_index;
+                } else {
+                    break;
+                }
+            }
+
+            Some(ret)
+        }
     }
 }
 
